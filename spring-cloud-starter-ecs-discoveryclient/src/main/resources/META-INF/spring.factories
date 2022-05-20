@@ -1,0 +1,4 @@
+org.springframework.cloud.bootstrap.BootstrapConfiguration=\
+com.asrevo.cloud.ecs.discovery.EcsConfigProperties,com.asrevo.cloud.ecs.discovery.EcsConfigProperties,com.asrevo.cloud.ecs.discovery.EcsDiscoveryProperties,org.springframework.cloud.ecs.EcsPropertySourceLocator
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.asrevo.cloud.ecs.discovery.EcsConfig
