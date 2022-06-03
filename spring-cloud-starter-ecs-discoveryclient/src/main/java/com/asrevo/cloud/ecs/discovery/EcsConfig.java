@@ -6,15 +6,12 @@ import com.amazonaws.services.servicediscovery.AWSServiceDiscoveryAsyncClientBui
 import io.awspring.cloud.core.region.RegionProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cloud.client.ConditionalOnDiscoveryEnabled;
 import org.springframework.cloud.client.ConditionalOnDiscoveryHealthIndicatorEnabled;
 import org.springframework.cloud.client.discovery.health.DiscoveryClientHealthIndicatorProperties;
 import org.springframework.cloud.client.discovery.health.reactive.ReactiveDiscoveryClientHealthIndicator;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -49,19 +46,6 @@ public class EcsConfig {
         public ReactiveDiscoveryClientHealthIndicator ecsReactiveDiscoveryClientHealthIndicator(EcsReactiveDiscoveryClient client, DiscoveryClientHealthIndicatorProperties properties) {
             return new ReactiveDiscoveryClientHealthIndicator(client, properties);
         }
-
     }
 
-
-    @ConditionalOnClass({HealthIndicator.class})
-    @ConditionalOnDiscoveryEnabled
-    @ConditionalOnDiscoveryHealthIndicatorEnabled
-    @Configuration
-    public static class ConfigMapDiscoveryClientHealthIndicatorConfiguration {
-
-        @Bean
-        public ConfigMapDiscoveryClientHealthIndicator indicatorInitializer(ApplicationEventPublisher publisher) {
-            return new ConfigMapDiscoveryClientHealthIndicator(publisher);
-        }
-    }
 }

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-cloud-ecs</artifactId>
         <groupId>com.asrevo</groupId>
-        <version>0.0.1</version>
+        <version>0.0.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,4 +24,30 @@
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
     </dependencies>
+    <url>https://github.com/ashraf-revo/spring-cloud-ecs</url>
+    <inceptionYear>2022</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Ashraf Revo</name>
+            <email>ashraf1abdelrasool@gmail.com</email>
+            <timezone>+2</timezone>
+        </developer>
+    </developers>
+    <scm>
+        <connection>
+            scm:git:git://github.com:ashraf-revo/spring-cloud-ecs.git
+        </connection>
+        <developerConnection>
+            scm:git:ssh://github.com:ashraf-revo/spring-cloud-ecs.git
+        </developerConnection>
+        <url>https://github.com/ashraf-revo/spring-cloud-ecs</url>
+    </scm>
 </project>
