@@ -12,9 +12,11 @@
 
     <groupId>com.asrevo</groupId>
     <artifactId>spring-cloud-ecs</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <modules>
         <module>spring-cloud-starter-ecs-discoveryclient</module>
+        <module>spring-cloud-starter-ecs-config</module>
+        <module>spring-cloud-ecs-example</module>
     </modules>
     <packaging>pom</packaging>
     <properties>

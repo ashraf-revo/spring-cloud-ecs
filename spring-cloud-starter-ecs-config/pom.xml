@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>spring-cloud-ecs</artifactId>
+        <groupId>com.asrevo</groupId>
+        <version>0.0.2</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>spring-cloud-starter-ecs-config</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>${aws-java-sdk.version}</version>
+        </dependency>
+
+    </dependencies>
+    <url>https://github.com/ashraf-revo/spring-cloud-ecs</url>
+    <inceptionYear>2022</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Ashraf Revo</name>
+            <email>ashraf1abdelrasool@gmail.com</email>
+            <timezone>+2</timezone>
+        </developer>
+    </developers>
+    <scm>
+        <connection>
+            scm:git:git://github.com:ashraf-revo/spring-cloud-ecs.git
+        </connection>
+        <developerConnection>
+            scm:git:ssh://github.com:ashraf-revo/spring-cloud-ecs.git
+        </developerConnection>
+        <url>https://github.com/ashraf-revo/spring-cloud-ecs</url>
+    </scm>
+</project>

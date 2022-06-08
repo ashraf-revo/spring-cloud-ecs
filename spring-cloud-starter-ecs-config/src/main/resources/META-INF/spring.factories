@@ -1,0 +1,2 @@
+org.springframework.cloud.bootstrap.BootstrapConfiguration=\
+com.asrevo.cloud.ecs.config.EcsConfigProperties,com.asrevo.cloud.ecs.config.EcsConfigClientBootstrapConfiguration

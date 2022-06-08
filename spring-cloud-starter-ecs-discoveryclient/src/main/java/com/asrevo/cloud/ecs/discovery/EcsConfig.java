@@ -30,7 +30,7 @@ public class EcsConfig {
 
         @Bean
         public AWSServiceDiscoveryAsync awsServiceDiscoveryAsync() {
-            return AWSServiceDiscoveryAsyncClientBuilder.standard().withCredentials(awsCredentialsProvider).withRegion(regionProvider.getRegion().getName()).build();
+            return AWSServiceDiscoveryAsyncClientBuilder.standard().withRegion(regionProvider.getRegion().getName()).build();
         }
 
         @Bean
