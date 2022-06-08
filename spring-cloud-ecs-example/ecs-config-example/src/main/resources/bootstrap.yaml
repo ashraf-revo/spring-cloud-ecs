@@ -6,8 +6,6 @@ spring:
       config:
         region: "us-east-1"
         enabled: true
-        paths:
-          - "s3://replox/ipmcg.yaml"
 cloud:
   aws:
     region:
