@@ -19,7 +19,8 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class EcsConfig {
 
-    @ConditionalOnProperty(value = "spring.cloud.ecs.discovery.enabled", matchIfMissing = true)
+    @ConditionalOnEcsDiscoveryEnabled
+    @ConditionalOnProperty(prefix = "spring.cloud.ecs.discovery", name = "namespace")
     @Configuration
     public static class EcsReactiveDiscoveryClientAutoConfiguration {
 
