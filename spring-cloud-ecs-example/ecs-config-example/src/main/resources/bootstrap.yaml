@@ -6,10 +6,9 @@ spring:
       config:
         region: "us-east-1"
         enabled: true
-cloud:
-  aws:
-    region:
-      static: us-east-1
+    aws:
+      region:
+        static: us-east-1
 management:
   endpoints:
     web:

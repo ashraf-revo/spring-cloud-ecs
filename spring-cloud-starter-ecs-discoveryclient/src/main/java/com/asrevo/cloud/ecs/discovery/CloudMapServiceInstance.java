@@ -1,42 +1,45 @@
 package com.asrevo.cloud.ecs.discovery;
 
-import com.amazonaws.services.servicediscovery.model.HttpInstanceSummary;
 import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
+import software.amazon.awssdk.services.servicediscovery.model.HttpInstanceSummary;
 
 import java.net.URI;
 import java.util.Map;
 
 public class CloudMapServiceInstance implements ServiceInstance {
     private final HttpInstanceSummary instance;
-
-    public CloudMapServiceInstance(HttpInstanceSummary instance) {
+    private final String serviceId;
+    private final String namespace;
+    public CloudMapServiceInstance(String serviceId,String namespace,HttpInstanceSummary instance) {
         this.instance = instance;
+        this.serviceId = serviceId;
+        this.namespace = namespace;
     }
 
 
     @Override
     public String getServiceId() {
-        return instance.getServiceName();
+        return this.serviceId;
     }
 
     public String getNamespace() {
-        return instance.getNamespaceName();
+        return this.namespace;
     }
 
     @Override
     public String getHost() {
-        return instance.getAttributes().get("AWS_INSTANCE_IPV4");
+        return instance.attributes().get("AWS_INSTANCE_IPV4");
     }
 
     @Override
     public int getPort() {
-        return Integer.parseInt(instance.getAttributes().get("AWS_INSTANCE_PORT"));
+        return Integer.parseInt(instance.attributes().get("AWS_INSTANCE_PORT"));
     }
 
     @Override
     public boolean isSecure() {
-        return Boolean.parseBoolean(instance.getAttributes().get("SECURE"));
+        return Boolean.parseBoolean(instance.attributes().get("SECURE"));
     }
 
     @Override
@@ -46,6 +49,6 @@ public class CloudMapServiceInstance implements ServiceInstance {
 
     @Override
     public Map<String, String> getMetadata() {
-        return instance.getAttributes();
+        return instance.attributes();
     }
 }

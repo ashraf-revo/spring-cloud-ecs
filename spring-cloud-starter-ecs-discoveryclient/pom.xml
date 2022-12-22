@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-cloud-ecs</artifactId>
         <groupId>com.asrevo</groupId>
-        <version>0.0.4</version>
+        <version>0.0.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,6 +22,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>servicediscovery</artifactId>
+            <version>${aws-java-sdk.version}</version>
         </dependency>
     </dependencies>
     <url>https://github.com/ashraf-revo/spring-cloud-ecs</url>

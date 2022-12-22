@@ -1,22 +1,19 @@
 package com.asrevo.cloud.ecs.discovery;
 
-import com.amazonaws.services.servicediscovery.AWSServiceDiscoveryAsync;
-import com.amazonaws.services.servicediscovery.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
 import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Schedulers;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import reactor.core.publisher.Mono;
+import software.amazon.awssdk.services.servicediscovery.ServiceDiscoveryAsyncClient;
+import software.amazon.awssdk.services.servicediscovery.model.*;
 
 @Slf4j
 public class EcsReactiveDiscoveryClient implements ReactiveDiscoveryClient {
     private final EcsDiscoveryProperties properties;
-    private final AWSServiceDiscoveryAsync discoveryAsync;
+    private final ServiceDiscoveryAsyncClient discoveryAsync;
 
-    public EcsReactiveDiscoveryClient(EcsDiscoveryProperties properties, AWSServiceDiscoveryAsync discoveryAsync) {
+    public EcsReactiveDiscoveryClient(EcsDiscoveryProperties properties, ServiceDiscoveryAsyncClient discoveryAsync) {
         this.properties = properties;
         this.discoveryAsync = discoveryAsync;
     }
@@ -28,35 +25,37 @@ public class EcsReactiveDiscoveryClient implements ReactiveDiscoveryClient {
 
     @Override
     public Flux<ServiceInstance> getInstances(String serviceId) {
-
-        return Flux.defer(() -> Flux.fromIterable(getDefaultServiceInstances(this.discoveryAsync, this.properties,
-                serviceId))).subscribeOn(Schedulers.boundedElastic());
+        return getDefaultServiceInstances(this.discoveryAsync, this.properties, serviceId);
     }
 
-    public static List<ServiceInstance> getDefaultServiceInstances(AWSServiceDiscoveryAsync discoveryAsync,
+    public static Flux<ServiceInstance> getDefaultServiceInstances(ServiceDiscoveryAsyncClient discoveryAsync,
                                                                    EcsDiscoveryProperties properties,
                                                                    String serviceId) {
-        DiscoverInstancesRequest request = new DiscoverInstancesRequest();
-        request.setNamespaceName(properties.getNamespace());
-        request.setServiceName(serviceId);
-        List<HttpInstanceSummary> instances = discoveryAsync.discoverInstances(request).getInstances();
-        log.info("getting " + instances.size() + " services for " + serviceId);
-        return instances.stream().map(CloudMapServiceInstance::new).collect(Collectors.toList());
+        DiscoverInstancesRequest request = DiscoverInstancesRequest.builder()
+                .namespaceName(properties.getNamespace())
+                .serviceName(serviceId)
+                .build();
+        return Mono.fromFuture(discoveryAsync.discoverInstances(request)).map(DiscoverInstancesResponse::instances)
+                .doOnEach(it -> {
+                    if (it.hasValue()) {
+                        log.info("getting " + it.get().size() + " services for " + serviceId);
+                    }
+                })
+                .flatMapMany(Flux::fromIterable)
+                .map(instance -> new CloudMapServiceInstance(serviceId, request.namespaceName(), instance));
     }
 
     @Override
     public Flux<String> getServices() {
-        return Flux.defer(() -> Flux.fromIterable(getEcsServices(this.discoveryAsync))).subscribeOn(Schedulers.boundedElastic());
+        return getEcsServices(this.discoveryAsync);
     }
 
-    public static List<String> getEcsServices(AWSServiceDiscoveryAsync discoveryAsync) {
-        ListServicesRequest listServicesRequest = new ListServicesRequest();
-        ListServicesResult listServicesResult = discoveryAsync.listServices(listServicesRequest);
+    public static Flux<String> getEcsServices(ServiceDiscoveryAsyncClient discoveryAsync) {
+        ListServicesRequest listServicesRequest = ListServicesRequest.builder().build();
         log.info("getting all services");
-        List<String> discoveredServices =
-                listServicesResult.getServices().stream().map(ServiceSummary::getName).collect(Collectors.toList());
-        log.info("got those services " + discoveredServices);
-        return discoveredServices;
+        return Mono.fromFuture(discoveryAsync.listServices(listServicesRequest)).map(ListServicesResponse::services)
+                .flatMapMany(Flux::fromIterable)
+                .map(ServiceSummary::name);
     }
 }
 

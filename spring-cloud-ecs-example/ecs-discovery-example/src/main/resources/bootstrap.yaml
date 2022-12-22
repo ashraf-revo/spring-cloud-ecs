@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: ecs-discovery-example
+  cloud:
+    gateway:
+      routes:
+        - id: base
+          uri: https://example.org
+          predicates:
+            - Path=/*
+      discovery:
+        locator:
+          enabled: true
+    ecs:
+      discovery:
+        enabled: true
+        namespace: "uxplore-dev.local"
+    aws:
+      region:
+        static: eu-central-1
+
+info:
+  app:
+    name: ${spring.application.name}
+management:
+  info:
+    env:
+      enabled: true
+    os:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: [ '*' ]

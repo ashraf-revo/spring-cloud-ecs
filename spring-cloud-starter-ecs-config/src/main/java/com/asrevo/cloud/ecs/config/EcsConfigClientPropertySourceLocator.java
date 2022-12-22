@@ -1,14 +1,14 @@
 package com.asrevo.cloud.ecs.config;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.GetObjectRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.bootstrap.config.PropertySourceLocator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.*;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -21,11 +21,11 @@ import java.util.Map;
 public class EcsConfigClientPropertySourceLocator implements PropertySourceLocator {
 
     private final EcsConfigProperties properties;
-    private final AmazonS3 amazonS3;
+    private final S3Client s3Client;
 
     public EcsConfigClientPropertySourceLocator(EcsConfigProperties properties) {
         this.properties = properties;
-        this.amazonS3 = AmazonS3ClientBuilder.standard().withRegion(properties.getRegion()).build();
+        this.s3Client = S3Client.builder().region(Region.of(properties.getRegion())).build();
     }
 
     @Override
@@ -55,9 +55,10 @@ public class EcsConfigClientPropertySourceLocator implements PropertySourceLocat
     private PropertySource<?> getMapPropertySource(URI s3Uri, ConfigurableEnvironment env) {
         String path = s3Uri.getPath();
         if (path.startsWith("/")) path = path.substring(1);
-        GetObjectRequest getObjectRequest = new GetObjectRequest(s3Uri.getHost(), path);
         Yaml yaml = new Yaml(new Constructor(HashMap.class));
-        Map<String, Object> load = yaml.load(amazonS3.getObject(getObjectRequest).getObjectContent());
+        Map<String, Object> load = yaml.load(s3Client.getObjectAsBytes(GetObjectRequest.builder()
+                        .bucket(s3Uri.getHost()).key(path)
+                .build()).asInputStream());
         return new MapPropertySource(s3Uri.toString(), convert("", load));
     }
 

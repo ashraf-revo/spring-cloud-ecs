@@ -1,9 +1,5 @@
 package com.asrevo.cloud.ecs.discovery;
 
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.services.servicediscovery.AWSServiceDiscoveryAsync;
-import com.amazonaws.services.servicediscovery.AWSServiceDiscoveryAsyncClientBuilder;
-import io.awspring.cloud.core.region.RegionProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -14,6 +10,9 @@ import org.springframework.cloud.client.discovery.health.DiscoveryClientHealthIn
 import org.springframework.cloud.client.discovery.health.reactive.ReactiveDiscoveryClientHealthIndicator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.regions.providers.AwsRegionProvider;
+import software.amazon.awssdk.services.servicediscovery.ServiceDiscoveryAsyncClient;
 
 @Configuration
 @Slf4j
@@ -25,19 +24,17 @@ public class EcsConfig {
     public static class EcsReactiveDiscoveryClientAutoConfiguration {
 
         @Autowired
-        private DefaultAWSCredentialsProviderChain awsCredentialsProvider;
-        @Autowired
-        private RegionProvider regionProvider;
+        private AwsRegionProvider regionProvider;
 
         @Bean
-        public AWSServiceDiscoveryAsync awsServiceDiscoveryAsync() {
-            return AWSServiceDiscoveryAsyncClientBuilder.standard().withRegion(regionProvider.getRegion().getName()).build();
+        public ServiceDiscoveryAsyncClient awsServiceDiscoveryAsync() {
+            return ServiceDiscoveryAsyncClient.builder().region(regionProvider.getRegion()).build();
         }
 
         @Bean
         @ConditionalOnMissingBean
         public EcsReactiveDiscoveryClient reactiveDiscoveryClient(EcsDiscoveryProperties ecsDiscoveryProperties,
-                                                                  AWSServiceDiscoveryAsync discoveryAsync) {
+                                                                  ServiceDiscoveryAsyncClient discoveryAsync) {
             return new EcsReactiveDiscoveryClient(ecsDiscoveryProperties, discoveryAsync);
         }
 
