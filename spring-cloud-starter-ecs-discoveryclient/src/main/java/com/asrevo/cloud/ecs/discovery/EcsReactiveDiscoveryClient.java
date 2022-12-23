@@ -5,8 +5,8 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import software.amazon.awssdk.services.servicediscovery.ServiceDiscoveryAsyncClient;
-import software.amazon.awssdk.services.servicediscovery.model.*;
+//import software.amazon.awssdk.services.servicediscovery.ServiceDiscoveryAsyncClient;
+//import software.amazon.awssdk.services.servicediscovery.model.*;
 
 @Slf4j
 public class EcsReactiveDiscoveryClient implements ReactiveDiscoveryClient {

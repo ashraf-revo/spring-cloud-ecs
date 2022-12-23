@@ -2,7 +2,7 @@ package com.asrevo.cloud.ecs.discovery;
 
 import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
-import software.amazon.awssdk.services.servicediscovery.model.HttpInstanceSummary;
+//import software.amazon.awssdk.services.servicediscovery.model.HttpInstanceSummary;
 
 import java.net.URI;
 import java.util.Map;
