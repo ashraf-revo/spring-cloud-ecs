@@ -1,12 +1,13 @@
 package com.asrevo.cloud.ecs.discovery;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-//import software.amazon.awssdk.services.servicediscovery.ServiceDiscoveryAsyncClient;
-//import software.amazon.awssdk.services.servicediscovery.model.*;
+import software.amazon.awssdk.services.servicediscovery.ServiceDiscoveryAsyncClient;
+import software.amazon.awssdk.services.servicediscovery.model.*;
 
 @Slf4j
 public class EcsReactiveDiscoveryClient implements ReactiveDiscoveryClient {
@@ -42,7 +43,13 @@ public class EcsReactiveDiscoveryClient implements ReactiveDiscoveryClient {
                     }
                 })
                 .flatMapMany(Flux::fromIterable)
-                .map(instance -> new CloudMapServiceInstance(serviceId, request.namespaceName(), instance));
+                .map(instanceSummary -> {
+                    String host = instanceSummary.attributes().get("AWS_INSTANCE_IPV4");
+                    int port = Integer.parseInt(instanceSummary.attributes().get("AWS_INSTANCE_PORT"));
+                    boolean secure = Boolean.parseBoolean(instanceSummary.attributes().get("SECURE"));
+                    return new DefaultServiceInstance(instanceSummary.instanceId(), serviceId, host, port, secure,
+                            instanceSummary.attributes());
+                });
     }
 
     @Override

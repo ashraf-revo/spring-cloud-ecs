@@ -12,22 +12,14 @@
     <artifactId>spring-cloud-starter-ecs-discoveryclient</artifactId>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>servicediscovery</artifactId>
+            <version>${aws-java-sdk.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>software.amazon.awssdk</groupId>-->
-<!--            <artifactId>servicediscovery</artifactId>-->
-<!--            <version>${aws-java-sdk.version}</version>-->
-<!--        </dependency>-->
     </dependencies>
     <url>https://github.com/ashraf-revo/spring-cloud-ecs</url>
     <inceptionYear>2022</inceptionYear>
