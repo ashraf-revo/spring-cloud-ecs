@@ -3,8 +3,6 @@
     <servers>
         <server>
             <id>ossrh</id>
-<!--            <username>ashraf-revo</username>-->
-<!--            <password>01120266849ASHra;</password>-->
         </server>
     </servers>
     <profiles>
@@ -15,8 +13,6 @@
             </activation>
             <properties>
                 <gpg.executable>gpg</gpg.executable>
-<!--                <gpg.keyname>E96B064F</gpg.keyname>-->
-<!--                <gpg.passphrase>ashraf_revo</gpg.passphrase>-->
             </properties>
         </profile>
     </profiles>
